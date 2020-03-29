@@ -1,26 +1,49 @@
 import React from 'react';
-import logo from './logo.svg';
+import TodoList from './Components/TodoList'
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      inputValue: "",
+      todoList: [],
+    }
+  }
+
+  onInputChange = (e) => {
+    this.setState({
+      inputValue: e.target.value
+    })
+  }
+
+  addTodoItem = () => {
+    const inputValue = this.state.inputValue;
+    const oldTodoList = this.state.todoList;
+
+    this.setState({
+      inputValue: '',
+      todoList: [...oldTodoList, inputValue]
+    })
+  }
+
+  render() {
+    const inputValue = this.state.inputValue;
+    const todoList = this.state.todoList;
+
+    return (
+      <div className="container" >
+        <br />
+        <br />
+        <div className="row">
+          <input className="form-control col-10 App" type="text" placeholder="Enter Todo" onChange={this.onInputChange} value={inputValue} />
+          <button type="button" className="col-2 App btn btn-primary" onClick={this.addTodoItem}>Add</button>
+        </div>
+        <br />
+        <TodoList todoList={todoList} />
+      </div>
+    );
+  }
 }
 
 export default App;
