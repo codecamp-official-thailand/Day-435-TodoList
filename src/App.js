@@ -7,6 +7,8 @@ class App extends React.Component {
   state = {
     inputValue: "",
     todoList: [],
+    editedId: null,
+    editedText: null,
   }
 
   addTodoItem = () => {
@@ -33,14 +35,50 @@ class App extends React.Component {
     })
   }
 
+  editItemById = () => {
+    const targetId = this.state.editedId;
+    const editedText = this.state.editedText
+
+    let newTodoList = this.state.todoList.map((todoItem) => {
+      if (todoItem.id == targetId) {
+        return {
+          id: todoItem.id,
+          task: editedText,
+        }
+      } else {
+        return todoItem
+      }
+    })
+
+    console.log(newTodoList)
+
+    this.setState({
+      todoList: newTodoList
+    })
+  }
+
   onChangeInputValue = (e) => {
     this.setState({
       inputValue: e.target.value
     })
   }
 
+  onChangeEditedId = (e) => {
+    this.setState({
+      editedId: Number(e.target.value)
+    })
+  }
+
+  onChangeEditedText = (e) => {
+    this.setState({
+      editedText: e.target.value
+    })
+  }
+
   render() {
     const inputValue = this.state.inputValue;
+    const editedId = this.state.editedId;
+    const editedText = this.state.editedText;
 
     return (
       <div className="container" >
@@ -49,6 +87,12 @@ class App extends React.Component {
         <div className="row">
           <input value={inputValue} onChange={this.onChangeInputValue} className="form-control col-10 App" placeholder="Enter Todo-list" />
           <button onClick={this.addTodoItem} type="button" className="col-2 App btn btn-primary">Add</button>
+        </div>
+        <br />
+        <div className="row">
+          <input value={editedText} onChange={this.onChangeEditedText} className="form-control col-8 App" placeholder="Edit text here" />
+          <input value={editedId} onChange={this.onChangeEditedId} className="form-control col-2 App" placeholder="Edited ID" />
+          <button onClick={this.editItemById} className="col-2 App btn btn-primary" >Edit</button>
         </div>
         <br />
         <TodoList deleteItemById={this.deleteItemById} todoList={this.state.todoList} />
