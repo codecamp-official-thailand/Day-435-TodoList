@@ -6,8 +6,8 @@ class TodoList extends React.Component {
     return (
       <div className="row">
         <div className="col App">
-          <ul class="list-group">
-            {this.props.todoList.map(item => <TodoItem item={item} />)}
+          <ul className="list-group">
+            {this.props.todoList.map(item => <TodoItem deleteItemById={this.props.deleteItemById} task={item.task} id={item.id} />)}
           </ul>
         </div>
       </div>

@@ -1,46 +1,57 @@
 import React from 'react';
 import TodoList from './Components/TodoList'
 import './App.css';
+import _ from 'lodash';
 
 class App extends React.Component {
-  constructor() {
-    super();
-    this.state = {
-      inputValue: "",
-      todoList: [],
-    }
+  state = {
+    inputValue: "",
+    todoList: [],
   }
 
-  onInputChange = (e) => {
+  addTodoItem = () => {
+    const inputValue = this.state.inputValue;
+    const todoList = this.state.todoList;
+    const newTodoObj = {
+      id: _.uniqueId(),
+      task: inputValue
+    }
+
+    // อย่าทำแบบนี้นะ: this.state.todoList.push(inputValue);
+
+    this.setState({
+      inputValue: '',
+      todoList: [newTodoObj, ...todoList]
+    })
+  }
+
+  deleteItemById = targetId => {
+    let newTodoList = this.state.todoList.filter(itemEle => targetId !== itemEle.id)
+
+    this.setState({
+      todoList: newTodoList,
+    })
+  }
+
+  onChangeInputValue = (e) => {
     this.setState({
       inputValue: e.target.value
     })
   }
 
-  addTodoItem = () => {
-    const inputValue = this.state.inputValue;
-    const oldTodoList = this.state.todoList;
-
-    this.setState({
-      inputValue: '',
-      todoList: [...oldTodoList, inputValue]
-    })
-  }
-
   render() {
     const inputValue = this.state.inputValue;
-    const todoList = this.state.todoList;
 
     return (
       <div className="container" >
         <br />
         <br />
         <div className="row">
-          <input className="form-control col-10 App" type="text" placeholder="Enter Todo" onChange={this.onInputChange} value={inputValue} />
-          <button type="button" className="col-2 App btn btn-primary" onClick={this.addTodoItem}>Add</button>
+          <input value={inputValue} onChange={this.onChangeInputValue} className="form-control col-10 App" placeholder="Enter Todo-list" />
+          <button onClick={this.addTodoItem} type="button" className="col-2 App btn btn-primary">Add</button>
         </div>
         <br />
-        <TodoList todoList={todoList} />
+        <TodoList deleteItemById={this.deleteItemById} todoList={this.state.todoList} />
       </div>
     );
   }
