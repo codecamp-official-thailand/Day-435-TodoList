@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
+import { Button } from 'antd'
 import './TodoItem.css'
 
 class TodoItem extends Component {
-
   render() {
     const task = this.props.task;
     const id = this.props.id;
@@ -12,18 +12,14 @@ class TodoItem extends Component {
     }
 
     return (
-      <li className="list-group-item">
-        <div className="container">
-          <div className="row">
-            <div className="col-10 todo-item">
-              ID: {id} || {task}
-            </div>
-            <div onClick={handleDelete.bind(this)} className="col-2 btn btn-danger">
-              Delete
-          </div>
-          </div>
+      <>
+        <div className="todo-item">
+          {task}
         </div>
-      </li>
+        <Button danger onClick={handleDelete.bind(this)}>
+          Delete
+        </Button>
+      </>
     )
   }
 }

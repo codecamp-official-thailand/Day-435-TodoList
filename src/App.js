@@ -1,7 +1,9 @@
 import React from 'react';
-import TodoList from './Components/TodoList'
+import TodoList from './Components/TodoList';
 import './App.css';
 import _ from 'lodash';
+import Axios from 'axios';
+import { Button, Input, Row, Col } from 'antd';
 
 class App extends React.Component {
   state = {
@@ -9,6 +11,19 @@ class App extends React.Component {
     todoList: [],
     editedId: null,
     editedText: null,
+  }
+
+  clickToSendRequest = () => {
+    Axios.get("http://www.mocky.io/v2/5e82e4942f00006cfa2fc586")
+      .then(response => {
+        console.log(response.data)
+        this.setState({
+          todoList: response.data
+        })
+      })
+      .catch(error => {
+        console.log(error)
+      })
   }
 
   addTodoItem = () => {
@@ -57,21 +72,9 @@ class App extends React.Component {
     })
   }
 
-  onChangeInputValue = (e) => {
+  onChange = (stateName, stateValue) => {
     this.setState({
-      inputValue: e.target.value
-    })
-  }
-
-  onChangeEditedId = (e) => {
-    this.setState({
-      editedId: Number(e.target.value)
-    })
-  }
-
-  onChangeEditedText = (e) => {
-    this.setState({
-      editedText: e.target.value
+      [stateName]: stateValue
     })
   }
 
@@ -81,22 +84,49 @@ class App extends React.Component {
     const editedText = this.state.editedText;
 
     return (
-      <div className="container" >
+      <Col>
+        <br />
+        <Row justify="space-around">
+          <Col span={10}>
+            <Row justify="center">
+              Todo Task
+            </Row>
+          </Col>
+          <Col span={4}>
+            <Row justify="center">
+              Action Button
+            </Row>
+          </Col>
+        </Row>
         <br />
         <br />
-        <div className="row">
-          <input value={inputValue} onChange={this.onChangeInputValue} className="form-control col-10 App" placeholder="Enter Todo-list" />
-          <button onClick={this.addTodoItem} type="button" className="col-2 App btn btn-primary">Add</button>
-        </div>
+        <Row justify="space-around">
+          <Col span={10}>
+            <Input value={inputValue} onChange={(e) => this.onChange("inputValue", e.target.value)} className="form-control col-10 App" placeholder="Enter Todo-list" />
+          </Col>
+          <Col span={4}>
+            <Row justify="center">
+              <Button onClick={this.addTodoItem} type="button" className="col-2 App btn btn-primary">Add</Button>
+            </Row>
+          </Col>
+        </Row>
         <br />
-        <div className="row">
-          <input value={editedText} onChange={this.onChangeEditedText} className="form-control col-8 App" placeholder="Edit text here" />
-          <input value={editedId} onChange={this.onChangeEditedId} className="form-control col-2 App" placeholder="Edited ID" />
-          <button onClick={this.editItemById} className="col-2 App btn btn-primary" >Edit</button>
-        </div>
+        <Row justify="space-around">
+          <Col xs={8} sm={7} md={6}>
+            <Input value={editedText} onChange={(e) => this.onChange("editedText", e.target.value)} className="form-control col-8 App" placeholder="Edit text here" />
+          </Col>
+          <Col xs={8} sm={7} md={2}>
+            <Input value={editedId} onChange={(e) => this.onChange("editedId", e.target.value)} className="form-control col-2 App" placeholder="Edited ID" />
+          </Col>
+          <Col xs={8} sm={7} md={4}>
+            <Row justify="center">
+              <Button onClick={this.editItemById} className="col-2 App btn btn-primary" >Edit</Button>
+            </Row>
+          </Col>
+        </Row>
         <br />
         <TodoList deleteItemById={this.deleteItemById} todoList={this.state.todoList} />
-      </div>
+      </Col>
     );
   }
 }
