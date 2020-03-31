@@ -18,7 +18,7 @@ class TodoItem extends Component {
             <div className="col-10 todo-item">
               ID: {id} || {task}
             </div>
-            <div onClick={handleDelete} className="col-2 btn btn-danger">
+            <div onClick={handleDelete.bind(this)} className="col-2 btn btn-danger">
               Delete
           </div>
           </div>
